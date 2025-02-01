@@ -2,12 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import {useRouter} from 'next/navigation';
 import axios from "axios";
 import Image from "next/image";
+
+
 
 const ServiceCard = () => {
   const [services, setServices] = useState([]); // Pastikan state awal adalah array
   const [loading, setLoading] = useState(true);
+
+  const router = useRouter();  
 
   useEffect(() => {
     axios
@@ -20,7 +25,7 @@ const ServiceCard = () => {
       .catch((error) => {
         console.error("Error fetching services:", error);
         setLoading(false);
-      });
+      }); 
   }, []);
 
   if (loading) {
@@ -32,7 +37,7 @@ const ServiceCard = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 md:mb-48 md:max-w-5xl py-8">
+    <div className="container mx-auto px-4 md:mb-48 md:max-w-6xl py-8">
       <h2 className="text-2xl font-bold text-center mb-6">Our Services</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {services.map((service) => (
@@ -50,8 +55,8 @@ const ServiceCard = () => {
               className="w-full h-48 object-cover"
             />
             <div className="p-4">
-              <h3 className="text-lg font-semibold">{service.name}</h3>
-              <p className="text-gray-600">
+              <h3 className="text-lg font-bold">{service.name}</h3>
+              <p className="text-gray-600 mt-3">
                 Rp {service.price.toLocaleString()}
               </p>
             </div>

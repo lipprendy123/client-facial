@@ -1,11 +1,10 @@
 'use client'
 import Image from 'next/image';
-import Facial from '../../../public/facial-hero.avif';
 import { motion } from "framer-motion";
 
 export default function Hero() {
   return (
-    <section className="flex flex-col md:flex-row items-center justify-center min-h-screen md:max-w-5xl p-6 md:pb-28 container mx-auto">
+    <section className="flex flex-col md:flex-row items-center justify-center min-h-screen md:max-w-6xl p-6 md:pb-28 container mx-auto">
       <motion.div 
         className="md:w-1/2 text-center md:text-left px-6"
         initial={{ opacity: 0, x: -50 }}
