@@ -1,110 +1,127 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import axios from "axios";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { Card, CardHeader, CardTitle, CardContent } from '../../../../components/ui/card';
+import { Input } from '../../../../components/ui/input';
+import { Button } from '../../../../components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../components/ui/select';
 
-const BookingForm = () => {
-  const { id } = useParams();
+const BookingForm = ({ serviceId, serviceName, servicePrice }) => {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    clientName: "",
-    clientEmail: "",
-    clientPhone: "",
-    date: "",
-    time: "",
-    bookingType: "home_calling",
+    clientName: '',
+    clientEmail: '',
+    clientPhone: '',
+    date: '',
+    time: '',
+    bookingType: ''
   });
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     try {
-      const response = await axios.post("http://localhost:4000/api/bookings", {
+      const response = await axios.post('http://localhost:4000/api/bookings', {
         ...formData,
-        service: id,
+        service: serviceId
       });
 
-      console.log("Booking success:", response.data);
-      alert("Booking berhasil!");
-
-      router.push("/"); // Redirect ke halaman utama atau halaman sukses
-    } catch (error) {
-      console.error("Booking error:", error);
-      alert("Terjadi kesalahan saat booking.");
+      if (response.data.success) {
+        // Redirect to confirmation page or show success message
+        router.push('/');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Booking failed. Please try again.');
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Form Booking</h2>
+    <Card className="w-full max-w-md mx-auto mt-10">
+      <CardHeader>
+        <CardTitle>Booking for {serviceName}</CardTitle>
+      </CardHeader>
+      <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
+          <Input
             type="text"
             name="clientName"
-            placeholder="Nama"
             value={formData.clientName}
             onChange={handleChange}
+            placeholder="Full Name"
             required
-            className="w-full p-3 border rounded-lg"
           />
-          <input
+          <Input
             type="email"
             name="clientEmail"
-            placeholder="Email"
             value={formData.clientEmail}
             onChange={handleChange}
+            placeholder="Email"
             required
-            className="w-full p-3 border rounded-lg"
           />
-          <input
-            type="text"
+          <Input
+            type="tel"
             name="clientPhone"
-            placeholder="Nomor Telepon"
             value={formData.clientPhone}
             onChange={handleChange}
+            placeholder="Phone Number"
             required
-            className="w-full p-3 border rounded-lg"
           />
-          <input
+          <Input
             type="date"
             name="date"
             value={formData.date}
             onChange={handleChange}
             required
-            className="w-full p-3 border rounded-lg"
           />
-          <input
+          <Input
             type="time"
             name="time"
             value={formData.time}
             onChange={handleChange}
             required
-            className="w-full p-3 border rounded-lg"
           />
-          <select
+          <Select 
             name="bookingType"
             value={formData.bookingType}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg"
+            onValueChange={(value) => setFormData(prev => ({...prev, bookingType: value}))}
+            required
           >
-            <option value="home_calling">Home Calling</option>
-            <option value="visit_to_clinic">Visit to Clinic</option>
-          </select>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+            <SelectTrigger>
+              <SelectValue placeholder="Select Booking Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="home_calling">Home Calling</SelectItem>
+              <SelectItem value="visit_to_clinic">In Clinic</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {error && <p className="text-red-500">{error}</p>}
+
+          <Button 
+            type="submit" 
+            className="w-full"
+            disabled={loading}
           >
-            Submit Booking
-          </button>
+            {loading ? 'Booking...' : `Book Now - Rp ${servicePrice?.toLocaleString() || 'N/A'}`}
+          </Button>
         </form>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

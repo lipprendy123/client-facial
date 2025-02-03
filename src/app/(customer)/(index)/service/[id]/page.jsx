@@ -1,30 +1,28 @@
-"use client";
+'use client'
 
 import axios from "axios";
 import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import Link from "next/link";
+import BookingForm from "../../booking/page"; // Import the new BookingForm component
 
 const ServiceDetail = () => {
   const params = useParams();
   const id = params.id;
-  const router = useRouter();
   const [service, setService] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showBookingForm, setShowBookingForm] = useState(false);
 
   useEffect(() => {
     if (id) {
       axios
         .get(`http://localhost:4000/api/services/${id}`)
         .then((response) => {
-          console.log("API Response:", response.data); // Debug
-          setService(response.data.data); // Perbaikan akses data
+          setService(response.data.data);
           setLoading(false);
         })
         .catch((error) => {
@@ -47,16 +45,12 @@ const ServiceDetail = () => {
     return <div>Data tidak ditemukan.</div>;
   }
 
-  console.log("Service Image:", service.image);
-
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4 md:px-8 lg:px-12">
       <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="md:flex">
-          {/* Image Slider */}
+          {/* Image Slider (previous implementation remains the same) */}
           <div className="md:w-1/2 w-full relative">
-            {" "}
-            {/* Added relative for absolute positioning */}
             <Swiper
               navigation={true}
               modules={[Navigation]}
@@ -74,14 +68,10 @@ const ServiceDetail = () => {
                 ))
               ) : (
                 <div className="flex items-center justify-center h-full">
-                  {" "}
-                  {/* Centered placeholder */}
                   <p className="text-gray-500">Gambar tidak tersedia</p>
                 </div>
               )}
             </Swiper>
-            {/* Optional: Add image counter or other overlay elements here */}
-            {/* Example: <div className="absolute bottom-4 left-4 bg-gray-800 bg-opacity-50 text-white px-2 py-1 rounded">1/3</div> */}
           </div>
 
           {/* Service Info */}
@@ -95,8 +85,6 @@ const ServiceDetail = () => {
               </p>
 
               <div className="grid grid-cols-2 gap-4 mb-6 md:flex md:items-center md:justify-between">
-                {" "}
-                {/* Used grid for responsiveness */}
                 <div>
                   <span className="text-lg font-semibold text-gray-700">
                     Harga:
@@ -116,14 +104,10 @@ const ServiceDetail = () => {
               </div>
 
               <div className="mb-8">
-                {" "}
-                {/* Increased margin bottom */}
                 <h2 className="text-2xl font-bold text-gray-800 mb-4 md:text-3xl">
                   Manfaat
                 </h2>
                 <ul className="list-disc list-inside text-gray-600 space-y-2 md:text-lg">
-                  {" "}
-                  {/* Added space-y for list items */}
                   {service?.benefits?.length > 0 ? (
                     service.benefits.map((benefit) => (
                       <li key={benefit._id}>{benefit.name}</li>
@@ -135,14 +119,25 @@ const ServiceDetail = () => {
               </div>
             </div>
 
-            <Link
-              href={`/booking?serviceId=${service._id}`}
+            <button
+              onClick={() => setShowBookingForm(!showBookingForm)}
               className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 font-medium text-lg md:text-xl"
             >
-              Pesan Sekarang
-            </Link>
+              {showBookingForm ? 'Tutup Form Booking' : 'Pesan Sekarang'}
+            </button>
           </div>
         </div>
+
+        {/* Booking Form */}
+        {showBookingForm && (
+          <div className="p-6 bg-gray-50">
+            <BookingForm 
+              serviceId={service._id}
+              serviceName={service.name}
+              servicePrice={service.price}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
