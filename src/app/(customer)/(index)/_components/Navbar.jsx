@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import Link from "next/link";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,13 +11,13 @@ export default function Navbar() {
     <nav className="bg-blue-600 p-4 shadow-md">
       <div className="container mx-auto max-w-5xl flex justify-between items-center">
         {/* Logo */}
-        <div className="text-white text-xl font-bold">MyLogo</div>
+        <div className="text-white text-xl font-bold">FacialKeisha</div>
 
         {/* Menu Items */}
         <div className="hidden md:flex space-x-6">
-          <a href="#home" className="text-white hover:text-gray-200">Home</a>
-          <a href="#about" className="text-white hover:text-gray-200">About</a>
-          <a href="#service" className="text-white hover:text-gray-200">Service</a>
+          <Link href="/" className="text-white hover:text-gray-200">Home</Link>
+          <Link href="/about" className="text-white hover:text-gray-200">About</Link>
+          <Link href="/service" className="text-white hover:text-gray-200">Service</Link>
         </div>
 
         {/* Mobile Menu Button */}

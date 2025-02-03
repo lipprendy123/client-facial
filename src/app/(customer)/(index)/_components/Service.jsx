@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import {useRouter} from 'next/navigation';
 import axios from "axios";
 import Image from "next/image";
+import Link from "next/link";
 
 
 
@@ -41,7 +42,8 @@ const ServiceCard = () => {
       <h2 className="text-2xl font-bold text-center mb-6">Our Services</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {services.map((service) => (
-          <motion.div
+          <Link key={service._id} href={`/service/${service._id}`}>
+            <motion.div
             key={service._id}
             className="bg-white shadow-lg rounded-2xl overflow-hidden cursor-pointer"
             whileHover={{ scale: 1.05 }}
@@ -61,6 +63,8 @@ const ServiceCard = () => {
               </p>
             </div>
           </motion.div>
+          </Link>
+
         ))}
       </div>
     </div>

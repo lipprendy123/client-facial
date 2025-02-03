@@ -1,18 +1,9 @@
-import Image from "next/image";
-import Navbar from "../(index)/_components/Navbar";
-import Hero from "../(index)/_components/Hero";
-import ServiceCard from "../(index)/_components/Service";
-import Footer from "../(index)/_components/Footer";
-import About from "./_components/About";
+import Hero from '../(index)/_components/Hero'
+import About from '../(index)/_components/About'
 
+// src/app/page.js
 export default function Home() {
-  return (
-    <>
-      <Navbar/>
-      <Hero/>
-      <About/>
-      <ServiceCard/>
-      <Footer/>
-    </>
-  );
+  return <>
+    <Hero/>
+  </>;
 }

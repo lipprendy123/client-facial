@@ -16,7 +16,7 @@ export default function Hero() {
           Kami menawarkan jasa facial berkualitas tinggi untuk menjaga kesehatan dan kecantikan kulit Anda.
         </p>
         <button className="mt-6 px-6 py-3 bg-blue-600 text-white text-lg rounded-lg shadow-md hover:bg-blue-700 transition">
-          Booking Sekarang
+          Lihat Service?
         </button>
       </motion.div>
       
@@ -33,6 +33,7 @@ export default function Hero() {
           alt="Facial Treatment" 
           className="rounded-lg shadow-lg w-full md:max-w-md"
           placeholder='empty'
+          priority
         />
       </motion.div>
     </section>
