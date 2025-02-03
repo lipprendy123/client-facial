@@ -50,7 +50,7 @@ const ServiceCard = () => {
             whileTap={{ scale: 0.95 }}
           >
             <Image
-              src={`http://localhost:4000/public/images/${service.image}`}
+              src={`http://localhost:4000/public/images/${service.image[0]}`}
               alt={service.name}
               width={300} // Atur width sesuai kebutuhan
               height={200} // Atur height sesuai kebutuhan
