@@ -7,18 +7,33 @@ import DashboardLayout from "../dashboardLayout";
 const BookingsPage = () => {
     const [bookings, setBookings] = useState([]);
     const [selectedBooking, setSelectedBooking] = useState(null);
-
+    
     useEffect(() => {
-        const fetchBookings = async () => {
-            try {
-                const response = await axios.get("http://localhost:4000/api/bookings");
-                setBookings(response.data.data);
-            } catch (error) {
-                console.error("Error fetching bookings:", error);
-            }
-        };
         fetchBookings();
     }, []);
+
+    const fetchBookings = async () => {
+        try {
+            const response = await axios.get("http://localhost:4000/api/bookings");
+            setBookings(response.data.data);
+        } catch (error) {
+            console.error("Error fetching bookings:", error);
+        }
+    };
+
+    const handleDeleteBooking = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this booking?")) return;
+        
+        try {
+            await axios.delete(`http://localhost:4000/api/bookings/${id}`);
+            setBookings(bookings.filter((booking) => booking._id !== id));
+            if (selectedBooking && selectedBooking._id === id) {
+                setSelectedBooking(null);
+            }
+        } catch (error) {
+            console.error("Error deleting booking:", error);
+        }
+    };
 
     return (
        <DashboardLayout>
@@ -53,9 +68,15 @@ const BookingsPage = () => {
                                 <td className="border p-2">
                                     <button
                                         onClick={() => setSelectedBooking(booking)}
-                                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mr-2"
                                     >
                                         Details
+                                    </button>
+                                    <button
+                                        onClick={() => handleDeleteBooking(booking._id)}
+                                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                                    >
+                                        Delete
                                     </button>
                                 </td>
                             </tr>
@@ -76,12 +97,20 @@ const BookingsPage = () => {
                         <p><strong>Time:</strong> {selectedBooking.time}</p>
                         <p><strong>Booking Type:</strong> {selectedBooking.bookingType}</p>
                         <p><strong>Status:</strong> {selectedBooking.status}</p>
-                        <button
-                            onClick={() => setSelectedBooking(null)}
-                            className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                        >
-                            Close
-                        </button>
+                        <div className="flex gap-4 mt-4">
+                            <button
+                                onClick={() => setSelectedBooking(null)}
+                                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                            >
+                                Close
+                            </button>
+                            <button
+                                onClick={() => handleDeleteBooking(selectedBooking._id)}
+                                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                            >
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
