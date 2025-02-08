@@ -6,7 +6,7 @@ import ServiceCard from './_components/Service';
 export default function Home() {
   return <>
     <Hero/>
-    {/* <About/>
-    <ServiceCard/> */}
+    <About/>
+    <ServiceCard/>
   </>; 
 }

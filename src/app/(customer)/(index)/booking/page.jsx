@@ -34,21 +34,36 @@ const BookingForm = ({ serviceId, serviceName, servicePrice }) => {
     setLoading(true);
     setError(null);
 
-    try {
-      const response = await axios.post('http://localhost:4000/api/bookings', {
-        ...formData,
-        service: serviceId
-      });
+    const token = sessionStorage.getItem('token'); // Ambil token dari localStorage
 
-      if (response.data.success) {
-        // Redirect to confirmation page or show success message
-        router.push('/');
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || 'Booking failed. Please try again.');
-      setLoading(false);
+    if (!token) {
+        setError("Token tidak ditemukan. Silakan login ulang.");
+        setLoading(false);
+        return;
     }
-  };
+
+    try {
+        const response = await axios.post(
+            'http://localhost:4000/api/bookings',
+            { ...formData, service: serviceId },
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Tambahkan token ke header
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+
+        if (response.data.success) {
+            router.push('/'); // Redirect setelah booking berhasil
+        }
+    } catch (err) {
+        setError(err.response?.data?.message || 'Booking failed. Please try again.');
+    } finally {
+        setLoading(false);
+    }
+};
+
 
   return (
     <Card className="w-full max-w-md mx-auto mt-10">

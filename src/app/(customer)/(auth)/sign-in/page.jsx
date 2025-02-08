@@ -17,15 +17,24 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4000/api/auth/login", form);
-      alert(response.data.message || "Login Success");
+        const response = await axios.post("http://localhost:4000/api/auth/login", form);
+        
+        console.log("Response Data:", response.data); // Cek apakah token ada
 
-      sessionStorage.setItem("token", response.data.token);
-      router.push(redirect); // Arahkan ke halaman sebelum login
+        if (response.data.success) {
+            sessionStorage.setItem("token", response.data.token);
+            sessionStorage.setItem("user", JSON.stringify(response.data.user));
+
+            alert(response.data.message || "Login Success");
+            router.push(redirect); // Redirect setelah login
+        } else {
+            alert(response.data.message || "Login failed");
+        }
     } catch (error) {
-      alert(error.response?.data?.message || "Something went wrong");
+        alert(error.response?.data?.message || "Something went wrong");
     }
-  };
+};
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
