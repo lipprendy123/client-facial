@@ -1,63 +1,70 @@
-'use client'
+import React from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import Image from 'next/image';
 
-import { motion } from 'framer-motion';
-
-export default function About() {
+const AboutComponent = () => {
   return (
-    <div id='about' className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="max-w-4xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden"
-      >
-        <div className="px-6 py-8 sm:p-10">
-          <motion.h1
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="text-4xl font-extrabold text-gray-900 sm:text-5xl"
-          >
-            Tentang Facial Web
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="mt-4 text-lg text-gray-600"
-          >
-            Facial Web adalah platform inovatif yang menggunakan teknologi pengenalan wajah untuk memberikan solusi yang aman, cepat, dan efisien. Kami berkomitmen untuk menyediakan layanan terbaik dalam bidang identifikasi dan verifikasi wajah.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="mt-8"
-          >
-            <h2 className="text-2xl font-bold text-gray-900">Fitur Kami</h2>
-            <ul className="mt-4 space-y-4">
-              <li className="flex items-start">
-                <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white">
-                  ✓
-                </span>
-                <p className="ml-3 text-base text-gray-700">Pengenalan wajah dengan akurasi tinggi.</p>
-              </li>
-              <li className="flex items-start">
-                <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white">
-                  ✓
-                </span>
-                <p className="ml-3 text-base text-gray-700">Integrasi mudah dengan sistem Anda.</p>
-              </li>
-              <li className="flex items-start">
-                <span className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white">
-                  ✓
-                </span>
-                <p className="ml-3 text-base text-gray-700">Keamanan data yang terjamin.</p>
-              </li>
-            </ul>
-          </motion.div>
+    <section className="py-16 px-4 bg-gradient-to-br from-pink-50 to-white">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
+              Pengalaman Facial Premium untuk Kulit Sehat & Cantik Anda
+            </h2>
+            <p className="text-gray-600 leading-relaxed">
+              Selamat datang di [Nama Spa], tempat di mana keindahan dan kesehatan kulit Anda menjadi prioritas utama kami. Dengan pengalaman lebih dari 10 tahun dalam industri kecantikan, kami menawarkan perawatan facial premium menggunakan produk-produk berkualitas tinggi dan teknologi modern.
+            </p>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-pink-600 text-xl">✨</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800">Perawatan Premium</h3>
+                  <p className="text-gray-600">Menggunakan produk dan teknik terbaik untuk hasil maksimal</p>
+                </div>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-pink-600 text-xl">👩‍⚕️</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800">Terapis Berpengalaman</h3>
+                  <p className="text-gray-600">Tim ahli kami telah tersertifikasi dan berpengalaman</p>
+                </div>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-pink-600 text-xl">🌿</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800">Produk Alami</h3>
+                  <p className="text-gray-600">Menggunakan bahan-bahan alami yang aman untuk kulit Anda</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="relative">
+            <div className="aspect-square rounded-lg overflow-hidden">
+              <Image 
+                src="/facial-hero.avif"
+                alt="Facial Spa Treatment"
+                width={100}
+                height={100}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-lg shadow-xl">
+              <p className="text-4xl font-bold text-pink-600">10+</p>
+              <p className="text-gray-600">Tahun Pengalaman</p>
+            </div>
+          </div>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </section>
   );
-}
+};
+
+
+
+export default AboutComponent;
