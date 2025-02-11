@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Swal from "sweetalert2";
 import DashboardLayout from "../dashboardLayout";
 import { ChevronLeft, ChevronRight, Edit, Trash2, Plus } from "lucide-react";
 import { Card, CardContent } from "../../../../../components/ui/card";
@@ -21,7 +22,6 @@ const Services = () => {
       const res = await fetch("http://localhost:4000/api/services");
       const data = await res.json();
       setServices(data.data);
-      // Initialize active image indexes
       const indexes = {};
       data.data.forEach(service => {
         indexes[service._id] = 0;
@@ -32,6 +32,37 @@ const Services = () => {
       console.error("Error fetching services:", error);
       setLoading(false);
     }
+  };
+
+  const handleDelete = async (serviceId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch(`http://localhost:4000/api/services/${serviceId}`, {
+            method: "DELETE",
+          });
+  
+          if (!res.ok) throw new Error("Failed to delete service");
+  
+          setServices((prevServices) =>
+            prevServices.filter((service) => service._id !== serviceId)
+          );
+  
+          Swal.fire("Deleted!", "Your service has been deleted.", "success");
+        } catch (error) {
+          console.error("Error deleting service:", error);
+          Swal.fire("Error!", "Failed to delete service.", "error");
+        }
+      }
+    });
   };
 
   const handleNextImage = (serviceId, imagesLength) => {
@@ -107,7 +138,10 @@ const Services = () => {
                         <button className="p-1 text-blue-600 hover:bg-blue-50 rounded">
                           <Edit size={20} />
                         </button>
-                        <button className="p-1 text-red-600 hover:bg-red-50 rounded">
+                        <button 
+                          onClick={() => handleDelete(service._id)}
+                          className="p-1 text-red-600 hover:bg-red-50 rounded"
+                        >
                           <Trash2 size={20} />
                         </button>
                       </div>

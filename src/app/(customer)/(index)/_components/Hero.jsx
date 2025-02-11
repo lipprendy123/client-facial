@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image';
 import { motion } from "framer-motion";
+import Link from 'next/link';
 
 export default function Hero() {
   return (
@@ -31,6 +32,7 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 pt-4">
+          <Link href='#service'>
           <motion.button 
             className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
             whileHover={{ scale: 1.05 }}
@@ -38,7 +40,9 @@ export default function Hero() {
           >
             Booking Sekarang
           </motion.button>
+          </Link>
           
+          <Link href='#service'>
           <motion.button 
             className="px-8 py-4 bg-white text-blue-600 text-lg rounded-xl shadow-md hover:shadow-lg border-2 border-blue-100 transform hover:-translate-y-0.5 transition-all"
             whileHover={{ scale: 1.05 }}
@@ -46,6 +50,7 @@ export default function Hero() {
           >
             Lihat Layanan
           </motion.button>
+          </Link>
         </div>
 
         <div className="flex items-center gap-6 pt-6">
@@ -78,12 +83,13 @@ export default function Hero() {
         
         <div className="relative rounded-2xl overflow-hidden shadow-2xl">
           <Image
-            src='/facial.jpeg'
-            width={900}
-            height={700} 
+            src='/example7.webp'
+            width={600}
+            height={600} 
             alt="Perawatan Wajah Premium" 
-            className="w-full md:max-w-2xl object-cover transform hover:scale-105 transition-transform duration-700"
+            className="md:max-w-2xl object-cover transform hover:scale-105 transition-transform duration-700"
             placeholder='empty'
+            quality={100}
             priority
           />
           

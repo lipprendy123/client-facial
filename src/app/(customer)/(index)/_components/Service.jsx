@@ -10,6 +10,7 @@ import Link from "next/link";
 const ServiceCard = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingId, setLoadingId] = useState(null); // ID service yang sedang loading
   const router = useRouter();
 
   useEffect(() => {
@@ -24,6 +25,13 @@ const ServiceCard = () => {
         setLoading(false);
       });
   }, []);
+
+  const handleCardClick = (id) => {
+    setLoadingId(id); // Set ID service yang sedang loading
+    setTimeout(() => {
+      router.push(`/service/${id}`);
+    }, 1000); // Simulasi delay sebelum pindah halaman
+  };
 
   if (loading) {
     return (
@@ -61,52 +69,51 @@ const ServiceCard = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
           {services.map((service, index) => (
-            <Link key={service._id} href={`/service/${service._id}`}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -8 }}
-                className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <Image
-                    src={`http://localhost:4000/public/images/${service.image[0]}`}
-                    alt={service.name}
-                    width={400}
-                    height={300}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
+            <motion.div
+              key={service._id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ y: -8 }}
+              className={`group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 ${
+                loadingId === service._id ? "opacity-50 cursor-wait" : ""
+              }`}
+              onClick={() => handleCardClick(service._id)}
+            >
+              <div className="relative h-64 overflow-hidden">
+                <Image
+                  src={`http://localhost:4000/public/images/${service.image[0]}`}
+                  alt={service.name}
+                  width={400}
+                  height={300}
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
 
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
-                    {service.name}
-                  </h3>
-                  
-                  <div className="flex items-center justify-between mt-4">
-                    <span className="text-lg font-bold text-blue-600">
-                      Rp {service.price.toLocaleString()}
-                    </span>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    >
-                      View Details
-                    </motion.button>
-                  </div>
-                </div>
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
+                  {service.name}
+                </h3>
 
-                {/* Badge - Bisa disesuaikan berdasarkan properti service */}
-                {/* <div className="absolute top-4 right-4">
-                  <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium text-blue-600 shadow-lg">
-                    Premium
+                <div className="flex items-center justify-between mt-4">
+                  <span className="text-lg font-bold text-blue-600">
+                    Rp {service.price.toLocaleString()}
                   </span>
-                </div> */}
-              </motion.div>
-            </Link>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg flex items-center justify-center transition-opacity duration-300"
+                  >
+                    {loadingId === service._id ? (
+                      <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
+                    ) : (
+                      "View Details"
+                    )}
+                  </motion.button>
+                </div>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
