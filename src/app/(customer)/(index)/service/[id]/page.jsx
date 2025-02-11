@@ -1,6 +1,7 @@
 'use client'
 
 import axios from "axios";
+import Swal from "sweetalert2";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -42,8 +43,18 @@ const ServiceDetail = () => {
 
   const handleBookingClick = () => {
     if (!isAuthenticated) {
-      alert("Anda harus login terlebih dahulu untuk melakukan pemesanan.");
-      router.push("/sign-in"); // Arahkan ke halaman login
+      Swal.fire({
+        title: "Anda harus login terlebih dahulu!",
+        text: "Silakan login untuk melakukan pemesanan.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Login",
+        cancelButtonText: "Tetap di Sini",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          router.push("/sign-in"); // Arahkan ke halaman login
+        }
+      });
       return;
     }
     setShowBookingForm(!showBookingForm);

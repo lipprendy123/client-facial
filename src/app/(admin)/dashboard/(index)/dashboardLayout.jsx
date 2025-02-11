@@ -15,7 +15,7 @@ const DashboardLayout = ({ children }) => {
         <main className="p-6 flex-1">{children}</main>
         <div className="p-6 flex justify-end">
         </div>
-      </div>
+      </div>  
     </div>
   );
 };
