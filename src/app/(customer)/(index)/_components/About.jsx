@@ -21,7 +21,7 @@ const fadeInRight = {
 
 const AboutComponent = () => {
   return (
-    <section className="py-16 px-4 bg-gradient-to-br from-pink-50 to-white">
+    <section id='about' className="py-16 px-4 bg-gradient-to-br from-pink-50 to-white">
       <div className="max-w-6xl mx-auto">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <motion.div 

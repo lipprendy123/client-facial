@@ -7,8 +7,9 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '../..
 import { Input } from '../../../../components/ui/input';
 import { Button } from '../../../../components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../components/ui/select';
-import { Loader2, Calendar, Clock, Phone, Mail, User, MapPin } from 'lucide-react';
+import { Loader2, Calendar, Clock, Phone, Mail, User, MapPin, Home } from 'lucide-react';
 import { Alert, AlertDescription } from '../../../../components/ui/alert';
+import { Textarea } from '../../../../components/ui/textarea';
 
 const BookingForm = ({ serviceId, serviceName, servicePrice }) => {
   const router = useRouter();
@@ -18,7 +19,8 @@ const BookingForm = ({ serviceId, serviceName, servicePrice }) => {
     clientPhone: '',
     date: '',
     time: '',
-    bookingType: ''
+    bookingType: '',
+    address: ''
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -58,6 +60,11 @@ const BookingForm = ({ serviceId, serviceName, servicePrice }) => {
       errors.bookingType = 'Booking type is required';
     }
 
+    // Only validate address if booking type is home_calling
+    if (formData.bookingType === 'home_calling' && !formData.address.trim()) {
+      errors.address = 'Address is required for home visits';
+    }
+
     setValidation(errors);
     return Object.keys(errors).length === 0;
   };
@@ -80,42 +87,70 @@ const BookingForm = ({ serviceId, serviceName, servicePrice }) => {
     setSuccess(null);
 
     if (!validateForm()) {
-      return;
+        return;
     }
 
     setLoading(true);
     const token = sessionStorage.getItem('token');
 
     if (!token) {
-      setError("Please login to continue booking");
-      setLoading(false);
-      return;
+        setError("Please login to continue booking");
+        setLoading(false);
+        return;
     }
 
     try {
-      const response = await axios.post(
-        'http://localhost:4000/api/bookings',
-        { ...formData, service: serviceId },
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+        // Langkah 1: Buat booking
+        const bookingResponse = await axios.post(
+            'http://localhost:4000/api/bookings',
+            { ...formData, service: serviceId },
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
 
-      if (response.data.success) {
-        setSuccess('Booking successfully created! Redirecting...');
-        setTimeout(() => {
-          router.push('/');
-        }, 2000);
-      }
+        if (bookingResponse.data.success) {
+            const booking = bookingResponse.data.data; // Asumsikan data booking dikembalikan
+
+            // Langkah 2: Kirim data booking ke endpoint pembayaran
+            const paymentResponse = await axios.post(
+              'http://localhost:4000/api/payment/create-transaction', // Endpoint pembayaran
+                 console.log("Data yang dikirim ke pembayaran:",
+                {
+                    order_id: `ORDER-${booking._id}`,
+                    gross_amount: servicePrice,
+                    customer_details: {
+                        first_name: booking.clientName,
+                        email: booking.clientEmail,
+                        phone: booking.clientPhone,
+                    },
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            ));
+
+            // Langkah 3: Tangani respons pembayaran
+            if (paymentResponse.data.redirect_url) {
+                window.location.href = paymentResponse.data.redirect_url; // Redirect ke Midtrans
+            } else {
+                setError('Payment initiation failed. Redirect URL not received.');
+            }
+        }
     } catch (err) {
-      setError(err.response?.data?.message || 'Booking failed. Please try again.');
+        setError(err.response?.data?.message || 'Booking or Payment failed. Please try again.');
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
+  
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -260,6 +295,25 @@ const BookingForm = ({ serviceId, serviceName, servicePrice }) => {
                 <p className="text-red-500 text-sm">{validation.bookingType}</p>
               )}
             </div>
+
+            {/* Address field - only show when home_calling is selected */}
+            {formData.bookingType === 'home_calling' && (
+              <div className="space-y-2">
+                <div className="relative">
+                  <Home className="absolute left-3 top-7 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <Textarea
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    placeholder="Your Full Address"
+                    className={`pl-10 pt-2 min-h-[100px] ${validation.address ? 'border-red-500' : ''}`}
+                  />
+                </div>
+                {validation.address && (
+                  <p className="text-red-500 text-sm">{validation.address}</p>
+                )}
+              </div>
+            )}
 
             <Button
               type="submit"
