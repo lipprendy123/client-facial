@@ -35,11 +35,11 @@ const AboutComponent = () => {
               Pengalaman Facial Premium untuk Kulit Sehat & Cantik Anda
             </h2>
             <p className="text-gray-600 leading-relaxed">
-              Selamat datang di [Nama Spa], tempat di mana keindahan dan kesehatan kulit Anda menjadi prioritas utama kami. Dengan pengalaman lebih dari 10 tahun dalam industri kecantikan, kami menawarkan perawatan facial premium menggunakan produk-produk berkualitas tinggi dan teknologi modern.
+              Selamat datang di Rumah Cantik Keisha, tempat di mana keindahan dan kesehatan kulit Anda menjadi prioritas utama kami. kami menawarkan beberapa perawatan facial menggunakan produk-produk berkualitas dan teknologi modern.
             </p>
             <div className="space-y-4">
               {[
-                { icon: '✨', title: 'Perawatan Premium', desc: 'Menggunakan produk dan teknik terbaik untuk hasil maksimal' },
+                { icon: '✨', title: 'Perawatan Berkualitas', desc: 'Menggunakan produk dan teknik terbaik untuk hasil optimal.' },
                 { icon: '👩‍⚕️', title: 'Terapis Berpengalaman', desc: 'Tim ahli kami telah tersertifikasi dan berpengalaman' },
                 { icon: '🌿', title: 'Produk Alami', desc: 'Menggunakan bahan-bahan alami yang aman untuk kulit Anda' }
               ].map((item, index) => (
@@ -85,7 +85,7 @@ const AboutComponent = () => {
               viewport={{ once: true, amount: 0.2 }}
               className="absolute -bottom-6 -left-6 bg-white p-6 rounded-lg shadow-xl"
             >
-              <p className="text-4xl font-bold text-pink-600">10+</p>
+              <p className="text-4xl font-bold text-pink-600">4+</p>
               <p className="text-gray-600">Tahun Pengalaman</p>
             </motion.div>
           </motion.div>

@@ -57,12 +57,7 @@ const PaymentSuccessPage = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <Calendar className="w-5 h-5 text-blue-500" />
-                  <span className="text-blue-700 font-medium">Check your email for booking details</span>
-                </div>
-              </div>
+             
 
               <div className="flex items-center justify-between p-4 bg-purple-50 rounded-lg">
                 <div className="flex items-center space-x-3">

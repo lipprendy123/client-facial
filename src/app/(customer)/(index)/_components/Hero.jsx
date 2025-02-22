@@ -53,7 +53,7 @@ export default function Hero() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-6 pt-6">
+        {/* <div className="flex items-center gap-6 pt-6">
           <div className="text-center">
             <h3 className="text-2xl font-bold text-gray-800">1000+</h3>
             <p className="text-gray-600">Klien Puas</p>
@@ -68,7 +68,7 @@ export default function Hero() {
             <h3 className="text-2xl font-bold text-gray-800">5⭐</h3>
             <p className="text-gray-600">Rating</p>
           </div>
-        </div>
+        </div> */}
       </motion.div>
       
       <motion.div 
@@ -105,8 +105,8 @@ export default function Hero() {
                 <span className="text-2xl">🌟</span>
               </div>
               <div>
-                <h3 className="font-semibold text-gray-800">Hasil Terbaik</h3>
-                <p className="text-gray-600">Dipercaya oleh ribuan pelanggan</p>
+                <h3 className="font-semibold text-gray-800">Pilihan Tepat</h3>
+                <p className="text-gray-600">untuk Perawatan Wajah anda</p>
               </div>
             </div>
           </motion.div>

@@ -60,10 +60,10 @@ const ServiceCard = () => {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            Our Premium Services
+          Layanan Kami
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Discover our range of professional facial treatments designed to enhance your natural beauty
+          Temukan berbagai perawatan wajah profesional yang dirancang untuk mempercantik kecantikan alami Anda.
           </p>
         </motion.div>
 
