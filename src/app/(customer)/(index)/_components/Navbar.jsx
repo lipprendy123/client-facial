@@ -183,7 +183,7 @@ export default function Navbar() {
       className={`md:hidden bg-white border-t shadow-md transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}
     >
       <div className="py-4 space-y-4 px-4">
-        <a href="#hero" onClick={(e) => handleSmoothScroll(e, "hero")} className="block text-gray-700 hover:text-blue-600 transition-colors">Home</a>
+        <a href="/" onClick={(e) => handleSmoothScroll(e, "hero")} className="block text-gray-700 hover:text-blue-600 transition-colors">Home</a>
         <a href="#about" onClick={(e) => handleSmoothScroll(e, "about")} className="block text-gray-700 hover:text-blue-600 transition-colors">About</a>
         <a href="#service" onClick={(e) => handleSmoothScroll(e, "service")} className="block text-gray-700 hover:text-blue-600 transition-colors">Service</a>
         <hr className="border-gray-200" />

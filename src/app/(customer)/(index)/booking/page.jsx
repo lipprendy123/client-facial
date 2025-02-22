@@ -81,6 +81,7 @@ const BookingForm = ({ serviceId, serviceName, servicePrice }) => {
     }
   };
 
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -92,6 +93,9 @@ const BookingForm = ({ serviceId, serviceName, servicePrice }) => {
 
     setLoading(true);
     const token = sessionStorage.getItem('token');
+    
+    // Debugging token
+    console.log("Token being used:", token);
 
     if (!token) {
         setError("Please login to continue booking");
@@ -106,19 +110,29 @@ const BookingForm = ({ serviceId, serviceName, servicePrice }) => {
             { ...formData, service: serviceId },
             {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${token}`, // Pastikan format bearer token benar
                     'Content-Type': 'application/json'
                 }
             }
         );
 
         if (bookingResponse.data.success) {
-            const booking = bookingResponse.data.data; // Asumsikan data booking dikembalikan
+            const booking = bookingResponse.data.data;
+            
+            // Log data sebelum dikirim ke payment
+            console.log("Payment request data:", {
+                order_id: `ORDER-${booking._id}`,
+                gross_amount: servicePrice,
+                customer_details: {
+                    first_name: booking.clientName,
+                    email: booking.clientEmail,
+                    phone: booking.clientPhone,
+                }
+            });
 
-            // Langkah 2: Kirim data booking ke endpoint pembayaran
+            // Langkah 2: Kirim data ke payment dengan token yang sama
             const paymentResponse = await axios.post(
-              'http://localhost:4000/api/payment/create-transaction', // Endpoint pembayaran
-                 console.log("Data yang dikirim ke pembayaran:",
+                'http://localhost:4000/api/payment/create-transaction',
                 {
                     order_id: `ORDER-${booking._id}`,
                     gross_amount: servicePrice,
@@ -126,24 +140,24 @@ const BookingForm = ({ serviceId, serviceName, servicePrice }) => {
                         first_name: booking.clientName,
                         email: booking.clientEmail,
                         phone: booking.clientPhone,
-                    },
+                    }
                 },
                 {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        'Authorization': `Bearer ${token}`, // Pastikan format bearer token benar
                         'Content-Type': 'application/json'
                     }
                 }
-            ));
+            );
 
-            // Langkah 3: Tangani respons pembayaran
             if (paymentResponse.data.redirect_url) {
-                window.location.href = paymentResponse.data.redirect_url; // Redirect ke Midtrans
+                window.location.href = paymentResponse.data.redirect_url;
             } else {
                 setError('Payment initiation failed. Redirect URL not received.');
             }
         }
     } catch (err) {
+        console.error("Full error:", err);
         setError(err.response?.data?.message || 'Booking or Payment failed. Please try again.');
     } finally {
         setLoading(false);
